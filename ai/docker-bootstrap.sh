@@ -48,6 +48,7 @@ consul_agent_cmd() {
 }
 
 #### Main ####
+install_jq
 
 if [ -e /etc/system-release ]; then
   if [ "$(cat /etc/system-release)" == "Amazon Linux AMI release 2016.03" ]; then
@@ -61,8 +62,6 @@ if [ -e /etc/system-release ]; then
     CONSUL_ARGS="${CONSUL_ARGS} -dc ${INSTANCE_REGION} -advertise ${INSTANCE_PRIV_IP}"
   fi
 fi
-
-install_jq
 
 setup_consul_dirs
 
