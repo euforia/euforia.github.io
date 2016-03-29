@@ -42,12 +42,8 @@ install_jq() {
 	return $?
 }
 
-consul_command() {
-	if [ "$1" == "with_docker" ]; then
-		echo ${DOCKER_BIN} run ${CONSUL_DOCKER_ARGS} ${CONSUL_DOCKER_AGENT_ARGS} ${CONSUL_DOCKER_IMAGE} ${CONSUL_ARGS}
-	else
-		echo ${DOCKER_BIN} run ${CONSUL_DOCKER_ARGS} ${CONSUL_DOCKER_IMAGE} ${CONSUL_ARGS}
-	fi
+consul_agent_cmd() {
+	echo "${DOCKER_BIN} run --name consul-agent ${CONSUL_DOCKER_ARGS} ${CONSUL_DOCKER_AGENT_ARGS} ${CONSUL_DOCKER_IMAGE} ${CONSUL_ARGS}"
 }
 
 #### Main ####
