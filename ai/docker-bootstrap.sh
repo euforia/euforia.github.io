@@ -58,3 +58,5 @@ if [ -e /etc/system-release ]; then
 fi
 
 install_jq
+
+set_consul_retry_join
