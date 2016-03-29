@@ -36,8 +36,8 @@ setup_consul_dirs() {
 install_jq() {
 	JQ_URL="https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
 	
-	[ -x "/usr/local/bin/jq" ] || {
-		curl -s -O -L ${JQ_URL} && chmod +x jq-linux64 && mv ./jq-linux64 /usr/local/bin/jq || { echo "Failed to install: jq"; return $?; };
+	[ -x "/usr/bin/jq" ] || {
+		curl -s -O -L ${JQ_URL} && chmod +x jq-linux64 && mv ./jq-linux64 /usr/bin/jq || { echo "Failed to install: jq"; return $?; };
 	}
 	return $?
 }
