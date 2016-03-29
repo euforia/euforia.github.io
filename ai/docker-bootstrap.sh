@@ -42,6 +42,7 @@ install_jq() {
 	return $?
 }
 
+# User call
 consul_agent_cmd() {
 	echo "${DOCKER_BIN} run --name consul-agent ${CONSUL_DOCKER_ARGS} ${CONSUL_DOCKER_AGENT_ARGS} ${CONSUL_DOCKER_IMAGE} ${CONSUL_ARGS}"
 }
