@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# Bootstrapping a linux box with docker and consul.
+#
+INSTANCE_ID=""
+INSTANCE_PRIV_IP=""
+INSTANCE_REGION=""
+
+DOCKER_BIN="/usr/bin/docker"
+
+CONSUL_HOST_DIR="/var/lib/consul"
+CONSUL_HOST_CFG_DIR="${CONSUL_HOST_DIR}/config"
+
+CONSUL_DOCKER_IMAGE="progrium/consul"
+CONSUL_DOCKER_ARGS="-d -p 8301:8301/udp -p 8302:8302/udp -p 8300:8300/tcp -p 8301:8301/tcp -p 8302:8302/tcp -p 8400:8400 -p 8500:8500 -p 53:53/udp -p 53:53/tcp -v ${CONSUL_HOST_DIR}:/data"
+CONSUL_ARGS="-node $(hostname) -ui-dir /ui -config-dir /data/config"
+# Only used by consul agents running in containers
+CONSUL_DOCKER_AGENT_ARGS="-v /var/run/docker.sock:/var/run/docker.sock"
+
+curl -s -O -L https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x jq-linux64 && mv ./jq-linux64 /usr/local/bin/jq
+
+[ -d "${CONSUL_HOST_CFG_DIR}" ] || mkdir -p "${CONSUL_HOST_CFG_DIR}"
+
+if [ -e /etc/system-release ]; then
+  if [ "$(cat /etc/system-release)" == "Amazon Linux AMI release 2016.03" ]; then
+    INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+    INSTANCE_PRIV_IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
+    INSTANCE_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document|grep region|awk -F\" '{print $4}')
+
+    /bin/rpm -qa | grep docker || { /usr/bin/yum -y install docker && /sbin/service docker start; }
+    
+    CONSUL_ARGS="${CONSUL_ARGS} -dc ${INSTANCE_REGION} -advertise ${INSTANCE_PRIV_IP}"
+  fi
+fi
