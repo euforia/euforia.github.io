@@ -35,11 +35,19 @@ setup_consul_dirs() {
 
 install_jq() {
 	JQ_URL="https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
-	curl -s -O -L ${JQ_URL} && chmod +x jq-linux64 && mv ./jq-linux64 /usr/local/bin/jq || {
-		echo "Failed to install: jq"
-		return $?
+	
+	[ -x "/usr/local/bin/jq" ] || {
+		curl -s -O -L ${JQ_URL} && chmod +x jq-linux64 && mv ./jq-linux64 /usr/local/bin/jq || { echo "Failed to install: jq"; return $?; };
 	}
 	return $?
+}
+
+consul_command() {
+	if [ "$1" == "with_docker" ]; then
+		echo ${DOCKER_BIN} run ${CONSUL_DOCKER_ARGS} ${CONSUL_DOCKER_AGENT_ARGS} ${CONSUL_DOCKER_IMAGE} ${CONSUL_ARGS}
+	else
+		echo ${DOCKER_BIN} run ${CONSUL_DOCKER_ARGS} ${CONSUL_DOCKER_IMAGE} ${CONSUL_ARGS}
+	fi
 }
 
 #### Main ####
