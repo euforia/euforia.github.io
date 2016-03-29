@@ -64,4 +64,6 @@ fi
 
 install_jq
 
+setup_consul_dirs
+
 set_consul_retry_join
