@@ -59,7 +59,7 @@ if [ -e /etc/system-release ]; then
 
     /bin/rpm -qa | grep docker || { /usr/bin/yum -y install docker && /sbin/service docker start; }
     
-    CONSUL_ARGS="${CONSUL_ARGS} -dc ${INSTANCE_REGION} -advertise ${INSTANCE_PRIV_IP}"
+    CONSUL_ARGS="${CONSUL_ARGS} -dc ${INSTANCE_REGION} -advertise ${INSTANCE_PRIV_IP} -client ${INSTANCE_PRIV_IP}"
   fi
 fi
 
