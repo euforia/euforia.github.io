@@ -13,7 +13,7 @@ DOCKER_BIN="/usr/bin/docker"
 CONSUL_HOST_DIR="/var/lib/consul"
 CONSUL_HOST_CFG_DIR="${CONSUL_HOST_DIR}/config"
 
-CONSUL_DOCKER_IMAGE="progrium/consul"
+CONSUL_DOCKER_IMAGE="gliderlabs/consul"
 CONSUL_DOCKER_ARGS="-d -p 8301:8301/udp -p 8302:8302/udp -p 8300:8300/tcp -p 8301:8301/tcp -p 8302:8302/tcp -p 8400:8400 -p 8500:8500 -p 53:53/udp -p 53:53/tcp -v ${CONSUL_HOST_DIR}:/data"
 CONSUL_ARGS="-node $(hostname) -ui-dir /ui -config-dir /data/config"
 # Only used by consul agents running in containers
