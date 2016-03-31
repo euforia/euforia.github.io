@@ -52,7 +52,6 @@ install_consul_agent() {
   mv consul /usr/bin/
   rm -f "${CONSUL_BIN_PKG}"
 
-  create_consul_dirs
   # Set only if not currently set
   if [ "${CONSUL_RETRY_JOINS}" == "" ]; then set_consul_retry_join; fi
 
@@ -81,6 +80,7 @@ set_instance_metadata() {
 #### Main #####
 
 install_jq
+create_consul_dirs
 
 if [ -e /etc/system-release ]; then
   if [ "$(cat /etc/system-release)" == "Amazon Linux AMI release 2016.03" ]; then
