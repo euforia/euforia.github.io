@@ -53,7 +53,8 @@ install_consul_agent() {
   rm -f "${CONSUL_BIN_PKG}"
 
   create_consul_dirs
-  set_consul_retry_join
+  # Set only if not currently set
+  if [ "${CONSUL_RETRY_JOINS}" == "" ]; then set_consul_retry_join; fi
 
   cat <<EOF > /etc/init/consul-agent.conf
 description "Consul Agent"
@@ -63,6 +64,12 @@ stop on runlevel [!12345]
 
 exec consul ${BASE_CONSUL_ARGS} -data-dir ${DEFAULT_CONSUL_DATA_DIR} -config-dir ${DEFAULT_CONSUL_CFG_DIR} -dc ${INSTANCE_REGION} -advertise ${INSTANCE_PRIV_IP} ${CONSUL_RETRY_JOINS} > /var/log/consul-agent.log 2>&1
 EOF
+}
+
+# helper 
+init_consul_agent() {
+  install_consul_agent
+  /sbin/start consul-agent
 }
 
 set_instance_metadata() {
