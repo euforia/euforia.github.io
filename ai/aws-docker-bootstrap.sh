@@ -13,7 +13,7 @@ BASE_CONSUL_ARGS="agent -node $(hostname) -client 0.0.0.0"
 # -retry-join servers
 CONSUL_RETRY_JOINS=""
 DEFAULT_CONSUL_DATA_DIR="/var/lib/consul"
-DEFAULT_CONSUL_CFG_DIR="${CONSUL_DATA_DIR}/config"
+DEFAULT_CONSUL_CFG_DIR="${DEFAULT_CONSUL_DATA_DIR}/config"
 
 
 install_jq() {
