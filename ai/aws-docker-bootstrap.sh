@@ -61,7 +61,7 @@ description "Consul Agent"
 start on (local-filesystems and net-device-up IFACE=eth0)
 stop on runlevel [!12345]
 
-exec consul ${BASE_CONSUL_ARGS} -data-dir ${DEFAULT_CONSUL_DATA_DIR} -config-dir ${DEFAULT_CONSUL_CFG_DIR} -dc ${INSTANCE_REGION} -advertise ${INSTANCE_PRIV_IP} ${CONSUL_RETRY_JOINS} > /var/log/consul-agent.log 2>&1
+exec consul ${BASE_CONSUL_ARGS} -data-dir ${DEFAULT_CONSUL_DATA_DIR} -config-dir ${DEFAULT_CONSUL_CFG_DIR} -dc ${INSTANCE_REGION} -advertise ${INSTANCE_PRIV_IP} ${CONSUL_RETRY_JOINS} > /var/log/consul-agent.log
 EOF
 }
 
