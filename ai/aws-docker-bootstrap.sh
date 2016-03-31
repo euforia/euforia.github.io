@@ -47,7 +47,7 @@ create_consul_dirs() {
 install_consul_agent() {
   CONSUL_BIN_PKG="consul_0.6.4_linux_amd64.zip"
 
-  curl -s -O "https://releases.hashicorp.com/consul/0.6.4/${CONSUL_BIN_PKG"
+  curl -s -O "https://releases.hashicorp.com/consul/0.6.4/${CONSUL_BIN_PKG}"
   unzip "${CONSUL_BIN_PKG}"
   mv consul /usr/bin/
   rm -f "${CONSUL_BIN_PKG}"
