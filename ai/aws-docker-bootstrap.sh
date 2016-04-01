@@ -6,6 +6,7 @@ INSTANCE_ID=""
 INSTANCE_PRIV_IP=""
 INSTANCE_REGION=""
 
+AWS_CMD="/usr/bin/aws"
 DOCKER_BIN="/usr/bin/docker"
 
 # Args used by server and agent
@@ -15,6 +16,9 @@ CONSUL_RETRY_JOINS=""
 DEFAULT_CONSUL_DATA_DIR="/var/lib/consul"
 DEFAULT_CONSUL_CFG_DIR="${DEFAULT_CONSUL_DATA_DIR}/config"
 
+ASG_NAME=""
+ASG_SERVER_CNT=""
+ASG_SERVER_IPS=""
 
 install_jq() {
   JQ_URL="https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
@@ -25,6 +29,28 @@ install_jq() {
       }
   }
   return $?
+}
+
+set_aws_asg_info() {
+  # Install aws cli
+  if [ ! -e "${AWS_CMD}" ]; then 
+    if [ ! -e "/usr/local/bin/pip" ]; then
+      easy_install pip
+    fi
+    /usr/local/bin/pip install awscli
+  fi
+
+  ASG_NAME=`${AWS_CMD} autoscaling describe-auto-scaling-instances --region ${INSTANCE_REGION} --instance ${INSTANCE_ID} --query 'AutoScalingInstances[0].AutoScalingGroupName' --output text`
+
+  # Get cluster member count from ASG.
+  ASG_SERVER_CNT=`${AWS_CMD} autoscaling describe-auto-scaling-groups --region ${INSTANCE_REGION} --auto-scaling-group-name ${ASG_NAME} --query "AutoScalingGroups[0].DesiredCapacity"`
+
+  for i in `${AWS_CMD} autoscaling describe-auto-scaling-groups --region $INSTANCE_REGION --auto-scaling-group-name $ASG_NAME --query "AutoScalingGroups[0].Instances[].InstanceId" --output text`;do 
+      # Get ip address of instance
+      ipaddr=$(${AWS_CMD} ec2 describe-instances --region ${INSTANCE_REGION} --instance ${i} --query "Reservations[0].Instances[0].PrivateIpAddress" --output text)
+
+      ASG_SERVER_IPS="${ASG_SERVER_IPS} ${ipaddr}"
+  done
 }
 
 install_aws_docker() {
