@@ -59,7 +59,7 @@ install_aws_docker() {
 
 set_consul_retry_join() {
   if [ "${CONSUL_SERVER_URL}" != "" ]; then
-    for i in `curl -s "${CONSUL_SERVER_URL}/v1/catalog/service/consul" | jq -r .[].Address`; do 
+    for i in `curl -s "${CONSUL_SERVER_URL}/v1/catalog/service/consul?dc=${INSTANCE_REGION}" | jq -r .[].Address`; do 
       CONSUL_RETRY_JOINS="${CONSUL_RETRY_JOINS} -retry-join ${i}";
     done
   fi
