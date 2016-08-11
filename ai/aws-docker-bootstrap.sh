@@ -107,10 +107,10 @@ set_instance_metadata() {
 
 install_jq
 create_consul_dirs
+set_instance_metadata
 
 if [ -e /etc/system-release ]; then
   if [ "$(cat /etc/system-release)" == "Amazon Linux AMI release 2016.03" ]; then
-    set_instance_metadata
     install_aws_docker
   fi
 fi
